@@ -2,3 +2,17 @@
 @import "flowbite/src/themes/default";
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
+
+@utility container {
+  margin-inline: auto;
+}
+
+/* tailwind Variables  */
+@theme {
+  --color-mainColor: #00298d;
+  --color-secondColor: #f0f2f5;
+}
+
+body {
+  background-color: var(--color-secondColor);
+}
