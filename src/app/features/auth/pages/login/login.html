@@ -1,1 +1,100 @@
-<p>login works!</p>
+<div class="min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-md p-8 w-full max-w-md">
+    <!-- Tabs -->
+    <div class="flex bg-secondColor rounded-xl p-1 mb-7">
+      <a
+        routerLink="/login"
+        class="flex-1 text-center py-2 rounded-lg font-semibold text-sm text-gray-800 bg-white shadow-sm">
+        Login
+      </a>
+      <a
+        routerLink="/register"
+        class="flex-1 text-center py-2 rounded-lg font-semibold text-sm text-gray-500">
+        Register
+      </a>
+    </div>
+
+    <!-- Header -->
+    <h2 class="text-2xl font-bold text-gray-900 mb-1">Log in to Route Posts</h2>
+    <p class="text-sm text-blue-500 mb-6">Log in and continue your social
+      journey.</p>
+
+    <!-- Form -->
+    <form (ngSubmit)="onSubmit()">
+      @if (errorMessage()) {
+      <div
+        class="p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
+        <span class="font-medium">Error!</span> {{ errorMessage() }}
+      </div>
+      }
+
+      <!-- Email / Username field -->
+      <div class="relative">
+        <i
+          class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="Email or username"
+          [value]="email()"
+          (input)="email.set($any($event.target).value)"
+          (blur)="emailTouched.set(true)"
+          class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-mainColor" />
+      </div>
+      @if (emailTouched() && emailError()) {
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
+        {{ emailError() }}
+      </div>
+      }
+
+      <!-- Password field -->
+      <div class="relative mt-3">
+        <i
+          class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm rotate-45"></i>
+        <input
+          [type]="showPassword() ? 'text' : 'password'"
+          id="password"
+          name="password"
+          placeholder="Password"
+          [value]="password()"
+          (input)="password.set($any($event.target).value)"
+          (blur)="passwordTouched.set(true)"
+          class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-10 text-sm focus:outline-none focus:border-mainColor" />
+        <button
+          type="button"
+          (click)="showPassword.set(!showPassword())"
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+          <i
+            [class]="showPassword() ? 'fa-solid fa-eye-slash text-sm' : 'fa-solid fa-eye text-sm'"></i>
+        </button>
+      </div>
+      @if (passwordTouched() && passwordError()) {
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
+        {{ passwordError() }}
+      </div>
+      }
+
+      <!-- Submit button -->
+      <button
+        type="submit"
+        [disabled]="!isValid()"
+        class="w-full bg-mainColor text-white font-semibold py-3 rounded-full mt-5 hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed">
+        Log In
+      </button>
+
+      <!-- Forgot password -->
+      <div class="text-center mt-4">
+        <a routerLink="/forgetPassword"
+          class="text-mainColor text-bold font-medium hover:underline">
+          Forgot Password ?
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
