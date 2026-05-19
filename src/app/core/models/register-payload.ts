@@ -5,6 +5,6 @@ export interface RegisterPayload {
   dateOfBirth: string,
   gender: string,
   password: string,
-  rePassword: string
+  rePassword: string,
 }
 

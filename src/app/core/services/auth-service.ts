@@ -6,6 +6,7 @@ import { Observable, tap } from 'rxjs';
 import { LoginPayload } from '../models/login-payload';
 import { RegisterPayload } from '../models/register-payload';
 import { TokenService } from './token-service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -16,13 +17,14 @@ export class AuthService {
   private readonly api = inject(ApiService);
   private readonly tokenService = inject(TokenService);
   private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
 
   private readonly currentUser = signal<User | null>(null);
 
   // ── public methods ───────────────────────────────────────────────────
 
   register(payload: RegisterPayload): Observable<AuthResponse> {
-    return this.api.post<AuthResponse>('/users/signup', payload).pipe(
+    return this.api.post<AuthResponse>('users/signup', payload).pipe(
       tap(res => {
         if (res.success === true) {
           // store token and user info if needed (e.g., in TokenService or a state management store)
@@ -30,7 +32,7 @@ export class AuthService {
           // update current user signal
           this.currentUser.set(res.data.user);
           // navigate to login Form
-          this.router.navigate(['/feed']); // main page after registration
+          this.router.navigate(['/login']); // login Form  after registration
         } else {
           // handle registration error (e.g., show message)
 
@@ -39,8 +41,11 @@ export class AuthService {
     )
   }
 
+
+
+
   login(payload: LoginPayload): Observable<AuthResponse> {
-    return this.api.post<AuthResponse>('/users/signin', payload).pipe(
+    return this.api.post<AuthResponse>('users/signin', payload).pipe(
       tap(res => {
         if (res.success === true) {
           // navigate to login Form

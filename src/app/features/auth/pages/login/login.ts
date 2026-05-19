@@ -1,9 +1,10 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { Spinner } from '../../../../shared/components/spinner/spinner';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink],
+  imports: [RouterLink, Spinner],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -16,6 +17,7 @@ export class Login {
   passwordTouched = signal(false);
   errorMessage  = signal('');
   showPassword  = signal(false);
+  isLoading = signal(false);
 
   emailError = computed(() => {
     const email = this.email();

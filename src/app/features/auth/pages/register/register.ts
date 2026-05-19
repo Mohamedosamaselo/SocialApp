@@ -1,5 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth-service';
+import { RegisterPayload } from './../../../../core/models/register-payload';
+import { Spinner } from '../../../../shared/components/spinner/spinner';
 import {
   AbstractControl,
   FormBuilder,
@@ -9,7 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-const MIN_AGE = 13;
+const MIN_AGE = 5;
 const MAX_AGE = 120;
 
 // ── helpers ──────────────────────────────────────────────────────────
@@ -76,12 +79,15 @@ const LABELS: Record<string, string> = {
 
 @Component({
   selector: 'app-register',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, Spinner],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
+
 export class Register implements OnInit {
   private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   registerForm!: FormGroup;
   isLoading = signal(false);
@@ -99,9 +105,8 @@ export class Register implements OnInit {
     this.registerForm = this.fb.group(
       {
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-        username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+        username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30), Validators.pattern(/^[a-z0-9_]+$/)]],
         email: ['', [Validators.required, Validators.email]],
-        gender: ['', Validators.required],
         dateOfBirth: [
           '',
           [
@@ -112,6 +117,7 @@ export class Register implements OnInit {
             maxAgeValidator(MAX_AGE),
           ],
         ],
+        gender: ['', Validators.required],
         password: ['', [Validators.required, Validators.minLength(6)]],
         rePassword: ['', Validators.required],
       },
@@ -126,6 +132,8 @@ export class Register implements OnInit {
     const e = ctrl.errors;
     if (e['required']) return `${LABELS[field]} is required`;
     if (e['minlength']) return `${LABELS[field]} must be at least ${e['minlength'].requiredLength} characters`;
+    if (e['maxlength']) return `${LABELS[field]} must be at most ${e['maxlength'].requiredLength} characters`;
+    if (e['pattern']) return 'Username may only contain lowercase letters, numbers, and underscores';
     if (e['email']) return 'Email is invalid';
     if (e['invalidDate']) return 'Invalid date format';
     if (e['futureDate']) return 'Birth date cannot be in the future';
@@ -146,14 +154,25 @@ export class Register implements OnInit {
     return this.registerForm.valid;
   }
 
+
   onSubmit(): void {
     this.registerForm.markAllAsTouched();
     if (!this.isValid) return;
-    // else form is valid, proceed with submission
-    const { rePassword, ...data } = this.registerForm.value;
-    console.log('REGISTER DATA:', data);
-    // call AuthService then navigate
 
-    this.registerForm.reset();
+
+    this.isLoading.set(true);
+    this.authService.register(this.registerForm.value).subscribe({
+      next: (_) => {
+        this.isLoading.set(false);
+        // this.router.navigate(['/login']);
+        this.registerForm.reset();
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.apiError.set(err.error?.message || 'Registration failed. Please try again.');
+      }
+    })
   }
+
+
 }

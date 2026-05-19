@@ -1,3 +1,4 @@
+@if (isLoading()) { <app-spinner /> }
 <div class="min-h-screen flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl shadow-md p-8 w-full max-w-md">
     <!-- Tabs -->
@@ -16,17 +17,19 @@
 
     <!-- Header -->
     <h2 class="text-2xl font-bold text-gray-900 mb-1">Create a new account</h2>
-    <p class="text-sm text-blue-500 mb-6">It is quick and easy.</p>
+    <p class="text-sm text-blue-500 mb-6">Register Now </p>
 
     <!-- Form -->
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       @if (apiError()) {
-      <div class="p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
+      <div
+        class="p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
         <span class="font-medium">Error!</span> {{ apiError() }}
       </div>
       }
 
-      <!-- Full name -->
+      <!--  name -->
       <div class="relative">
         <i
           class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
@@ -37,7 +40,9 @@
           class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-mainColor" />
       </div>
       @if (fieldError('name')) {
-      <div class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
         {{ fieldError('name') }}
       </div>
       }
@@ -53,12 +58,14 @@
           class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-mainColor" />
       </div>
       @if (fieldError('username')) {
-      <div class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
         {{ fieldError('username') }}
       </div>
       }
 
-      <!-- Email address -->
+      <!-- Email  -->
       <div class="relative mt-3">
         <i
           class="fa-solid fa-at absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
@@ -69,8 +76,27 @@
           class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-mainColor" />
       </div>
       @if (fieldError('email')) {
-      <div class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
         {{ fieldError('email') }}
+      </div>
+      }
+
+      <!-- dateOfBirth  -->
+      <div class="relative mt-3">
+        <i
+          class="fa-regular fa-calendar absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+        <input
+          type="date"
+          formControlName="dateOfBirth"
+          class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-mainColor text-gray-400" />
+      </div>
+      @if (fieldError('dateOfBirth')) {
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
+        {{ fieldError('dateOfBirth') }}
       </div>
       }
 
@@ -87,23 +113,10 @@
         </select>
       </div>
       @if (fieldError('gender')) {
-      <div class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
         {{ fieldError('gender') }}
-      </div>
-      }
-
-      <!-- Birth date -->
-      <div class="relative mt-3">
-        <i
-          class="fa-regular fa-calendar absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
-        <input
-          type="date"
-          formControlName="dateOfBirth"
-          class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-mainColor text-gray-400" />
-      </div>
-      @if (fieldError('dateOfBirth')) {
-      <div class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
-        {{ fieldError('dateOfBirth') }}
       </div>
       }
 
@@ -125,12 +138,14 @@
         </button>
       </div>
       @if (fieldError('password')) {
-      <div class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
         {{ fieldError('password') }}
       </div>
       }
 
-      <!-- Confirm password -->
+      <!-- rePassword -->
       <div class="relative mt-3">
         <i
           class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm rotate-45"></i>
@@ -148,7 +163,9 @@
         </button>
       </div>
       @if (rePasswordError) {
-      <div class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
+      <div
+        class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        role="alert">
         {{ rePasswordError }}
       </div>
       }
