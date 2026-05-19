@@ -27,10 +27,7 @@ export class AuthService {
     return this.api.post<AuthResponse>('users/signup', payload).pipe(
       tap(res => {
         if (res.success === true) {
-          // store token and user info if needed (e.g., in TokenService or a state management store)
-          this.tokenService.set(res.data.token);
-          // update current user signal
-          this.currentUser.set(res.data.user);
+
           // navigate to login Form
           this.router.navigate(['/login']); // login Form  after registration
         } else {
@@ -48,8 +45,12 @@ export class AuthService {
     return this.api.post<AuthResponse>('users/signin', payload).pipe(
       tap(res => {
         if (res.success === true) {
-          // navigate to login Form
-          this.router.navigate(['/login']);
+          // store token and user info if needed (e.g., in TokenService or a state management store)
+          this.tokenService.set(res.data.token);
+          // update current Social user Signal
+          this.currentUser.set(res.data.user);
+          // navigate to feed page after successful login
+          this.router.navigate(['/feed']);
         }
         else {
           // handle login error (e.g., show message)

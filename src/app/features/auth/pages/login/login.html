@@ -16,39 +16,34 @@
     </div>
 
     <!-- Header -->
-    <h2 class="text-2xl font-bold text-gray-900 mb-1">Log in to Route Posts</h2>
-    <p class="text-sm text-blue-500 mb-6">Log in and continue your social
-      journey.</p>
+    <h2 class="text-2xl font-bold text-gray-900 mb-1">Login </h2>
+    <p class="text-xl text-blue-500 mb-6">Login to your social App.</p>
 
     <!-- Form -->
-    <form (ngSubmit)="onSubmit()">
-      @if (errorMessage()) {
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      @if (apiError()) {
       <div
         class="p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
         role="alert">
-        <span class="font-medium">Error!</span> {{ errorMessage() }}
+        <span class="font-medium">Error!</span> {{ apiError() }}
       </div>
       }
 
-      <!-- Email / Username field -->
+      <!-- Email field -->
       <div class="relative">
         <i
           class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
         <input
           type="text"
-          id="email"
-          name="email"
+          formControlName="email"
           placeholder="Email or username"
-          [value]="email()"
-          (input)="email.set($any($event.target).value)"
-          (blur)="emailTouched.set(true)"
           class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-mainColor" />
       </div>
-      @if (emailTouched() && emailError()) {
+      @if (fieldError('email')) {
       <div
         class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
         role="alert">
-        {{ emailError() }}
+        {{ fieldError('email') }}
       </div>
       }
 
@@ -58,12 +53,8 @@
           class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm rotate-45"></i>
         <input
           [type]="showPassword() ? 'text' : 'password'"
-          id="password"
-          name="password"
+          formControlName="password"
           placeholder="Password"
-          [value]="password()"
-          (input)="password.set($any($event.target).value)"
-          (blur)="passwordTouched.set(true)"
           class="w-full border border-gray-200 rounded-xl py-3 pl-10 pr-10 text-sm focus:outline-none focus:border-mainColor" />
         <button
           type="button"
@@ -73,18 +64,18 @@
             [class]="showPassword() ? 'fa-solid fa-eye-slash text-sm' : 'fa-solid fa-eye text-sm'"></i>
         </button>
       </div>
-      @if (passwordTouched() && passwordError()) {
+      @if (fieldError('password')) {
       <div
         class="p-2 mt-1 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
         role="alert">
-        {{ passwordError() }}
+        {{ fieldError('password') }}
       </div>
       }
 
       <!-- Submit button -->
       <button
         type="submit"
-        [disabled]="!isValid()"
+        [disabled]="!isValid"
         class="w-full bg-mainColor text-white font-semibold py-3 rounded-full mt-5 hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed">
         Log In
       </button>

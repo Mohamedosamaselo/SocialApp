@@ -12,7 +12,6 @@ export class TokenService {
   get(): string | null {
     // return localStorage.getItem(TOKEN_KEY);
     return this.storage.get<string>(TOKEN_KEY);
-
   }
 
   set(token: string): void {
