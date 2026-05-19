@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth-service';
-import { RegisterPayload } from './../../../../core/models/register-payload';
 import { Spinner } from '../../../../shared/components/spinner/spinner';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import {
   AbstractControl,
   FormBuilder,
@@ -88,6 +89,7 @@ export class Register implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   registerForm!: FormGroup;
   isLoading = signal(false);
@@ -161,17 +163,19 @@ export class Register implements OnInit {
 
 
     this.isLoading.set(true);
-    this.authService.register(this.registerForm.value).subscribe({
-      next: (_) => {
-        this.isLoading.set(false);
-        // this.router.navigate(['/login']);
-        this.registerForm.reset();
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        this.apiError.set(err.error?.message || 'Registration failed. Please try again.');
-      }
-    })
+    this.authService.register(this.registerForm.value)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (_) => {
+          this.isLoading.set(false);
+          // this.router.navigate(['/login']);
+          this.registerForm.reset();
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.apiError.set(err.error?.message || 'Registration failed. Please try again.');
+        }
+      })
   }
 
 
